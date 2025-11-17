@@ -10,7 +10,7 @@ describe("OrangeHRM User Management Flow", () => {
         password: "Test@12345"
     };
 
-    const updatedUserRole = "Admin"; // For editing
+    const updatedUserRole = "Admin"; 
 
     it("Login into OrangeHRM", async () => {
         await browser.url("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");
@@ -28,58 +28,54 @@ describe("OrangeHRM User Management Flow", () => {
     });
 
     it("Add New User", async () => {
-        await $("button[data-v-10d463b7]").click(); // Add button
+        await $("button[data-v-10d463b7]").click(); 
 
-        // Select User Role
+      
         await $("//label[text()='User Role']/../..//div[@class='oxd-select-text-input']").click();
         await $("//span[text()='" + createdUser.role + "']").click();
 
-        // Enter Employee Name
+      
         await $("input[placeholder='Type for hints...']").setValue(createdUser.employeeName);
         await $("div[role='option']").click();
 
-        // Username
+       
         await $("//label[text()='Username']/../..//input").setValue(createdUser.username);
 
-        // Status = Enabled
+       
         await $("//label[text()='Status']/../..//div[@class='oxd-select-text-input']").click();
         await $("//span[text()='Enabled']").click();
 
-        // Password
         await $("//label[text()='Password']/../..//input").setValue(createdUser.password);
 
-        // Confirm Password
+    
         await $("//label[text()='Confirm Password']/../..//input").setValue(createdUser.password);
 
-        // Save
+      
         await $("button[type='submit']").click();
 
         await browser.pause(2000);
     });
 
     it("Search Newly Created User", async () => {
-        // Username
+ 
         await $("//label[text()='Username']/../..//input").setValue(createdUser.username);
 
-        // Click Search
         await $("button[type='submit']").click();
         await browser.pause(2000);
 
-        // Validate user appears in table
         const tableText = await $("div.oxd-table-card").getText();
         expect(tableText).toContain(createdUser.username);
     });
 
     it("Edit User Details", async () => {
-        // Click Edit (first row)
+
         await $$("i.bi-pencil")[0].click();
 
-        // Change User Role
         const roleDropdown = $("//label[text()='User Role']/../..//div[@class='oxd-select-text-input']");
         await roleDropdown.click();
         await $("//span[text()='" + updatedUserRole + "']").click();
 
-        // Save
+  
         await $("button[type='submit']").click();
 
         await browser.pause(2000);
@@ -95,14 +91,14 @@ describe("OrangeHRM User Management Flow", () => {
     });
 
     it("Delete the User", async () => {
-        // Click delete icon
+       
         await $$("i.bi-trash")[0].click();
 
-        // Confirmation popup → Yes Delete
+       
         await $("button.oxd-button--label-danger").click();
         await browser.pause(2000);
 
-        // Verify table empty or no record found
+
         const noRecords = await $("span.oxd-text--span").getText();
         expect(noRecords).toContain("No Records Found");
     });
